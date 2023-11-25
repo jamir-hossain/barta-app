@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PostController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\UserController;
 use Faker\Guesser\Name;
@@ -31,6 +32,8 @@ Route::middleware('auth')->group(function () {
    Route::get('/profile', [UserController::class, 'profile']);
    Route::get('/edit-profile', [UserController::class, 'editProfile']);
    Route::post('/edit-profile', [UserController::class, 'saveProfile']);
+
+   Route::resource('post', PostController::class);
 
    Route::get('logout', [AuthController::class, 'logout'])->name('logout');
 });
