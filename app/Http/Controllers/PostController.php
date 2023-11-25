@@ -78,6 +78,6 @@ class PostController extends Controller
     {
         Post::find($id)->delete();
 
-        return back();
+        return redirect()->to('/');
     }
 }
