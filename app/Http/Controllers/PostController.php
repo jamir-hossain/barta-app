@@ -44,7 +44,9 @@ class PostController extends Controller
      */
     public function show(string $id)
     {
-        $post = Post::with('user')->find($id);
+        $post = Post::where('id', $id)->with(['user', 'comments' => function ($query) {
+            $query->with('user')->orderBy('created_at', 'desc');
+        }])->orderBy('created_at', 'desc')->first();
 
         return view('pages/post/show', compact('post'));
     }

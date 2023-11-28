@@ -9,9 +9,9 @@ use Illuminate\Validation\Rules;
 
 class UserController extends Controller
 {
-    public function profile()
+    public function profile($id)
     {
-        $user = auth()->user();
+        $user = User::find($id);
 
         return view('profile', compact('user'));
     }
