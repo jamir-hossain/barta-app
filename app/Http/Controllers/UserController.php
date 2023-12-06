@@ -19,7 +19,13 @@ class UserController extends Controller
 
     public function editProfile()
     {
-        $user = auth()->user();
+        $user = User::find(auth()->user()->id);
+
+        if ($user->hasMedia()) {
+            $user->avatar = $user->getMedia()->first()->getUrl();
+        } else {
+            $user->avatar = null;
+        }
 
         return view('edit-profile', compact('user'));
     }
@@ -27,6 +33,7 @@ class UserController extends Controller
 
     public function saveProfile(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'first_name' => ['required', 'string', 'max:255'],
             'last_name' => ['required', 'string', 'max:255'],
@@ -44,6 +51,10 @@ class UserController extends Controller
             ])->onlyInput('current_password');
         }
 
+        if ($request->avatar) {
+            $user->addMedia($request->avatar)->toMediaCollection();
+        }
+
         $user->update([
             'first_name' => $request->first_name,
             'last_name' => $request->last_name,
@@ -52,5 +63,33 @@ class UserController extends Controller
         ]);
 
         return back();
+    }
+
+
+    public function search()
+    {
+        $users = User::all();
+
+        foreach ($users as $user) {
+            if ($user->hasMedia()) {
+                $user->avatar = $user->getMedia()->first()->getUrl();
+            } else {
+                $user->avatar = null;
+            }
+        }
+
+        return view('people', compact('users'));
+    }
+
+    public function searchResult(Request $request)
+    {
+        $query = $request->search;
+
+        $users = User::where('first_name', 'LIKE', '%' . $query . '%')
+            ->orWhere('last_name', 'LIKE', '%' . $query . '%')
+            ->orWhere('email', 'LIKE', '%' . $query . '%')
+            ->get();
+
+        return view('people', compact('users'));
     }
 }

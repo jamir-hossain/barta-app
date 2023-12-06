@@ -28,6 +28,8 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile/{id}', [UserController::class, 'profile']);
     Route::get('/edit-profile', [UserController::class, 'editProfile']);
     Route::post('/edit-profile', [UserController::class, 'saveProfile']);
+    Route::get('/people', [UserController::class, 'search']);
+    Route::post('/people', [UserController::class, 'searchResult']);
 
     Route::resource('post', PostController::class);
 

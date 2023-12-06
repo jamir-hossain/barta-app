@@ -19,11 +19,19 @@
                     <div class="flex items-center justify-between">
                         <div class="flex items-center space-x-3">
                             <div class="flex-shrink-0">
-                                <img
-                                    class="h-10 w-10 rounded-full object-cover"
-                                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                                    alt="Al Nahian" 
-                                />
+                                @if ($post->user->hasMedia())
+                                    <img
+                                        class="h-10 w-10 rounded-full object-cover"
+                                        src="{{$post->user->getMedia()->first()->getUrl()}}"
+                                        alt="Al Nahian" 
+                                    />
+                                @else
+                                    <img
+                                        class="h-10 w-10 rounded-full object-cover"
+                                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        alt="Al Nahian" 
+                                    />
+                                @endif
                             </div>
 
                             <div class="text-gray-900 flex flex-col min-w-0 flex-1">
@@ -114,6 +122,9 @@
 
                 <!-- Content -->
                 <div class="py-4 text-gray-700 font-normal">
+                    @if ($post->image)
+                        <img src="{{$post->image}}" alt="" class="mb-4">
+                    @endif
                     <p>{{$post->description}}</p>
                 </div>
 
@@ -154,11 +165,19 @@
                     @foreach ($post->comments as $comment)
                         <div>
                             <div class="flex items-center space-x-3">
-                                <img
-                                    class="h-7 w-7 rounded-full object-cover"
-                                    src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
-                                    alt="Al Nahian" 
-                                />
+                                @if ($comment->user->hasMedia())
+                                    <img
+                                        class="h-7 w-7 rounded-full object-cover"
+                                        src="{{$comment->user->getMedia()->first()->getUrl()}}"
+                                        alt="Al Nahian" 
+                                    />
+                                @else
+                                    <img
+                                        class="h-7 w-7 rounded-full object-cover"
+                                        src="https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png"
+                                        alt="Al Nahian" 
+                                    />
+                                @endif
     
                                 <div class="text-gray-900 flex flex-col min-w-0 flex-1">
                                     <p class="font-semibold line-clamp-1 text-sm">

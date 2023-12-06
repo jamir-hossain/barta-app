@@ -13,6 +13,14 @@ class HomeController extends Controller
             $query->with('user')->orderBy('created_at', 'desc');
         }])->orderBy('created_at', 'desc')->get();
 
+        foreach ($posts as $post) {
+            if ($post->hasMedia()) {
+                $post->image = $post->getMedia()->first()->getUrl();
+            } else {
+                $post->image = null;
+            }
+        }
+
         return view('index', compact('posts'));
     }
 }

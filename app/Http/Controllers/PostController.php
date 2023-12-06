@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\CreatePostRequest;
 use App\Models\Post;
 
-
 class PostController extends Controller
 {
     /**
@@ -31,10 +30,14 @@ class PostController extends Controller
     {
         $user = auth()->user();
 
-        Post::create([
+        $post = Post::create([
             'user_id' => $user->id,
             'description' => $request->description,
         ]);
+
+        if ($request->image) {
+            $post->addMedia($request->image)->toMediaCollection();
+        }
 
         return redirect()->to('/');
     }
@@ -78,7 +81,13 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-        Post::find($id)->delete();
+        $post = Post::find($id);
+
+        if ($post->hasMedia()) {
+            $post->getMedia()->first()->delete();
+        }
+
+        $post->delete();
 
         return redirect()->to('/');
     }
